@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Stele</title>
+    <style>
+       
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('./a%20simple%20stele%20image%20with%20a%20white%20background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            overflow: hidden;
+        }
+        .input-box, .menu, .heading {
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 0 auto;
+        }
+        .input-box {
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .menu, .heading {
+            display: none;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .menu a {
+            display: block;
+            margin: 10px 0;
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .full-page-heading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+            color: white;
+            font-size: 48px;
+            z-index: 1000;
+            display: none;
+        }
+        @media screen and (min-width : 1080px){
+            .input-box, .menu, .heading {
+                max-width: 453px;
+            }
+            body {
+                background-repeat: no-repeat;
+                background-size: max(43vw, 600px) auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="input-box" id="inputBox">
+        <input type="text" id="searchInput" placeholder="Traveler, What do you Seek?" />
+        <button id="viewContentButton"><i class="fas fa-user"></i> <i class="fas fa-list"></i></button>
+    </div>
+    <div class="menu" id="menu">
+        <h1>This is what you will find here</h1>
+        <a href="#" onclick="showHeading('Way of Human', 1)">Way of Human</a>
+        <a href="#" onclick="showHeading('Way of Life', 2)">Way of Life</a>
+        <a href="#" onclick="showHeading('Path of Masters', 3)">Path of Masters</a>
+    </div>
+    <div class="full-page-heading" id="fullPageHeading"></div>
+
+    <script>
+        const svr='http://127.0.0.1:3000'
+        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const content = event.target.value;
+                fetch(svr+'/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content })
+                }).then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById('inputBox').style.display = 'none';
+                    document.getElementById('menu').style.display = 'block';
+                });
+            }
+        });
+
+        function getRandomColor() { 
+            const letters = "0123456789ABCDEF"; 
+            let color = "#"; 
+            for (let i = 0; i < 6; i++) { 
+                color += letters[Math.floor(Math.random() * 16)]; 
+            } 
+            return color; 
+        }
+        
+        document.getElementById('viewContentButton').addEventListener('click', function() {
+            fetch(svr+'/randomTexts')
+                .then(response => response.json())
+                .then(data => {
+                    // Open a new window and display the random texts
+                    //let newWindow = window.open('', '_blank', 'width=600,height=400');
+                    let newWindow = window.open('', '_blank');
+                    newWindow.document.write('<html><head><title>Random Texts</title></head><body>');
+                    data.forEach(text => {
+                        newWindow.document.write(`<div class="text-box" onclick="zoomText(this)" style="border: 1px solid ${getRandomColor()}; margin: 10px; padding: 10px;">${text.content}</div>`);
+                    });
+                    newWindow.document.write('<script>function zoomText(element) { document.body.innerHTML = ""; element.style = "font-size: 48px; color: white; background: black; text-align: center;"; setTimeout(() => { window.close(); }, 2000); } <\/script>');
+                    newWindow.document.write('</body></html>');
+                });
+        });
+    </script>
+</body>
+</html>
+
