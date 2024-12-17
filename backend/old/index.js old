@@ -1,0 +1,40 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const sanitizeHtml = require('sanitize-html');
+const badWordsFilter = require('bad-words');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose.connect('mongodb://localhost:27017/spiritial_book', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const textSchema = new mongoose.Schema({
+    content: String,
+    flagged: Boolean
+});
+
+const Text = mongoose.model('Text', textSchema);
+
+app.post('/submit', async (req, res) => {
+    const filter = new badWordsFilter();
+    let content = sanitizeHtml(req.body.content);
+    let flagged = filter.isProfane(content);
+
+    const newText = new Text({ content: content, flagged: flagged });
+    await newText.save();
+
+    res.send('Content saved!');
+});
+
+app.get('/randomTexts', async (req, res) => {
+    const texts = await Text.find({ flagged: false }).limit(10);
+    res.json(texts);
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
