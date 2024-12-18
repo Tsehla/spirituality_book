@@ -11,7 +11,7 @@ async function getBadWordsFilter() {
 }
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9000;
 
 // Enable CORS for all routes
 app.use(cors());
@@ -20,7 +20,8 @@ app.use(cors());
 // const url = 'mongodb://localhost:27017';
 const url = 'mongodb+srv://spiritual_book:RDkGSiqFOnAWRqgJ@cluster0.fuern.gcp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const dbName = 'spiritial_book';
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+// const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(url);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
