@@ -1,0 +1,18 @@
+{
+  "name": "spirituality-book",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^3.60.3"
+  },
+  "dependencies": {
+    "itty-router": "^5.0.18",
+    "mongodb": "^6.12.0",
+    "sanitize-html": "^2.14.0"
+  }
+}
