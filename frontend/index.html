@@ -73,6 +73,58 @@
             border: none;
             background: none;
         }
+        #loader {
+            display: none;
+            margin: auto;
+        }
+        .loader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+          }
+          .loader:before{
+            content: '';
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            top: 50%;
+            left: 0;
+            transform: translate(-5px, -50%);
+            background: linear-gradient(to right, #fff 50%, #de3500 50%) no-repeat;
+            background-size: 200% auto;
+            background-position: 100% 0;
+            animation: colorBallMoveX 1.5s linear infinite alternate;
+          }
+         .loader:after{
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: #de3500;
+         }
+        @keyframes colorBallMoveX {
+          0%  {
+            background-position: 0% 0;
+            transform: translate(-15px, -50%);
+          }
+          15%  , 25% {
+            background-position: 0% 0;
+            transform: translate(0px, -50%);
+          }
+          75% , 85% {
+            background-position: 100% 0;
+            transform: translate(50px, -50%);
+          }
+          100% {
+            background-position: 100% 0;
+            transform: translate(65px, -50%);
+          }
+        }
+
         @media screen and (min-width : 1080px){
             .input-box, .menu, .heading {
                 max-width: 453px;
@@ -88,13 +140,14 @@
 <body>
     <div class="input-box" id="inputBox">
         <input type="text" id="searchInput" placeholder="Traveler, What do you Seek?" />
+        <span class="loader" id='loader'></span>
         <button id="viewContentButton" class="intentions_button"><i class="fas fa-user"></i> <i class="fas fa-list"></i></button>
     </div>
     <div class="menu" id="menu">
         <h1>This is what you will find here</h1>
-        <a href="#" onclick="showHeading('Way of Human', 1)">Way of Human</a>
-        <a href="#" onclick="showHeading('Way of Life', 2)">Way of Life</a>
-        <a href="#" onclick="showHeading('Path of Masters', 3)">Path of Masters</a>
+        <a href="javascript:void()" onclick="showHeading('Way of Human', 1)">Way of Human</a>
+        <a href="javascript:void()" onclick="showHeading('Way of Life', 2)">Way of Life</a>
+        <a href="javascript:void()" onclick="showHeading('Path of Masters', 3)">Path of Masters</a>
     </div>
     <div class="full-page-heading" id="fullPageHeading"></div>
 
@@ -104,15 +157,26 @@
         document.getElementById('searchInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 const content = event.target.value;
+                document.getElementById('searchInput').style.display = 'none';
+                document.getElementById('viewContentButton').style.display = 'none';
+                document.getElementById('loader').style.display = 'block';
+                
+                setInterval(()=>{
+                    document.getElementById('searchInput').style.display = 'block';
+                    document.getElementById('viewContentButton').style.display = 'block';
+                    document.getElementById('inputBox').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('menu').style.display = 'block';
+                }, 5000);
+                
                 fetch(svr+'/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: content })
                 }).then(response => response.text())
                 .then(data => {
-                    console.log(data);
-                    document.getElementById('inputBox').style.display = 'none';
-                    document.getElementById('menu').style.display = 'block';
+                    console.log('--- ',data);
+            
                 });
             }
         });
@@ -141,6 +205,23 @@
                     newWindow.document.write('</body></html>');
                 });
         });
+        
+        function showHeading(text, page) {
+            var fullPageHeading = document.getElementById('fullPageHeading');
+            fullPageHeading.textContent = text;
+            fullPageHeading.style.display = 'flex';
+
+            setTimeout(function() {
+                fullPageHeading.style.transform = 'scale(1)';
+                fullPageHeading.style.transition = 'all 1s';
+                setTimeout(function() {
+                    fullPageHeading.style.display = 'none';
+                    document.getElementById('menu').style.display = 'none';
+                    window.open('/'+page+'.html');
+                }, 1000);
+            }, 500);
+        }
+        
     </script>
 </body>
 </html>

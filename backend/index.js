@@ -37,7 +37,7 @@ app.post('/submit', async (req, res) => {
 
     
     if(!content){  //empty input
-        return;
+        return res.status(500).send('An error occurred');
     }
     
     const newText = {
