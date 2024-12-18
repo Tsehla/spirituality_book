@@ -14,7 +14,8 @@ const app = express();
 const port = process.env.PORT || 9000;
 
 // Enable CORS for all routes
-app.use(cors());
+app.options('*', cors()); // include before other routes
+app.use(cors()); // Header support for Express
 
 // MongoDB connection
 // const url = 'mongodb://localhost:27017';
