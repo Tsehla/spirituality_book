@@ -35,6 +35,11 @@ app.post('/submit', async (req, res) => {
     let content = sanitizeHtml(req.body.content);
     // let flagged = filter.isProfane(content);
 
+    
+    if(!content){  //empty input
+        return;
+    }
+    
     const newText = {
         content: content,
         // flagged: flagged,

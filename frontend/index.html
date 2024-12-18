@@ -33,7 +33,7 @@
             backdrop-filter: blur(10px);
         }
         .input-box input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border: none;
             border-radius: 5px;
@@ -67,6 +67,12 @@
             z-index: 1000;
             display: none;
         }
+        
+        .intentions_button {
+            margin: 30px auto 0;
+            border: none;
+            background: none;
+        }
         @media screen and (min-width : 1080px){
             .input-box, .menu, .heading {
                 max-width: 453px;
@@ -82,7 +88,7 @@
 <body>
     <div class="input-box" id="inputBox">
         <input type="text" id="searchInput" placeholder="Traveler, What do you Seek?" />
-        <button id="viewContentButton"><i class="fas fa-user"></i> <i class="fas fa-list"></i></button>
+        <button id="viewContentButton" class="intentions_button"><i class="fas fa-user"></i> <i class="fas fa-list"></i></button>
     </div>
     <div class="menu" id="menu">
         <h1>This is what you will find here</h1>
