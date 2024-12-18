@@ -21,7 +21,10 @@ app.use(cors());
 const url = 'mongodb+srv://spiritual_book:RDkGSiqFOnAWRqgJ@cluster0.fuern.gcp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const dbName = 'spiritial_book';
 // const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-const client = new MongoClient(url);
+const client = new MongoClient(url, {
+    serverSelectionTimeoutMS: 3000,
+    autoSelectFamily: false}
+);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
