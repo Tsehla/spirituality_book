@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Stele</title>
+    <title>Spiritual Book</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
@@ -183,35 +183,47 @@
                     body: JSON.stringify({ content: content })
                 }).then(response => response.text())
                 .then(data => {
-                    console.log('--- ',data);
+                    //console.log('--- ',data);
             
                 });
             }
         });
 
-        function getRandomColor() { 
-            const letters = "0123456789ABCDEF"; 
-            let color = "#"; 
-            for (let i = 0; i < 6; i++) { 
-                color += letters[Math.floor(Math.random() * 16)]; 
-            } 
-            return color; 
-        }
+        //function getRandomColor() { 
+        //    const letters = "0123456789ABCDEF"; 
+        //    let color = "#"; 
+        //    for (let i = 0; i < 6; i++) { 
+        //        color += letters[Math.floor(Math.random() * 16)]; 
+        //    } 
+        //    return color; 
+        //}
         
         document.getElementById('viewContentButton').addEventListener('click', function() {
-            fetch(svr+'/randomTexts')
-                .then(response => response.json())
-                .then(data => {
-                    // Open a new window and display the random texts
-                    //let newWindow = window.open('', '_blank', 'width=600,height=400');
-                    let newWindow = window.open('', '_blank');
-                    newWindow.document.write('<html><head><title>Random Texts</title></head><body>');
-                    data.forEach(text => {
-                        newWindow.document.write(`<div class="text-box" onclick="zoomText(this)" style="border: 1px solid ${getRandomColor()}; margin: 10px; padding: 10px;">${text.content}</div>`);
-                    });
-                    newWindow.document.write('<script>function zoomText(element) { document.body.innerHTML = ""; element.style = "font-size: 48px; color: white; background: black; text-align: center;"; setTimeout(() => { window.close(); }, 2000); } <\/script>');
-                    newWindow.document.write('</body></html>');
-                });
+            
+            //document.getElementById('searchInput').style.display = 'none';
+            //document.getElementById('viewContentButton').style.display = 'none';
+            //document.getElementById('loader').style.display = 'block';
+            //
+            //fetch(svr+'/randomTexts')
+            //    .then(response => {
+            //        document.getElementById('searchInput').style.display = 'block';
+            //        document.getElementById('viewContentButton').style.display = 'block';
+            //        document.getElementById('loader').style.display = 'none';
+            //    
+            //        // Open a new window and display the random texts
+            //        return response.json()
+            //    })
+            //    .then(data => {
+            //     
+                        window.open('/seekers_text.html', '_self');
+            //        let newWindow = window.open('', '_self');
+            //        newWindow.document.write('<html><head><title>Seekers Texts</title></head><body>');
+            //        data.forEach(text => {
+            //            newWindow.document.write(`<div class="text-box" onclick="zoomText(this)" style="border: 1px solid ${getRandomColor()}; margin: 10px; padding: 10px;">${text.content}</div>`);
+            //        });
+            //        newWindow.document.write('<script>function zoomText(element) { document.body.innerHTML = ""; element.style = "font-size: 48px; color: white; background: black; text-align: center;"; setTimeout(() => { window.close(); }, 2000); } <\/script>');
+            //        newWindow.document.write('</body></html>');
+                //});
         });
         
         function showHeading(text, page) {
